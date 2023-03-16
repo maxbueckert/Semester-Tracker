@@ -27,6 +27,6 @@ my needs.
 - As a user, I would like to view all tasks for the course in chronological order based on due-date, despite what order I added the tasks to my tracker
 - As a user, I would like to see all my upcoming tasks, for all combined courses, in chronological order, despite what order I added the tasks/courses to my tracker
 - As a user, I would like to remove courses and/or tasks that I am tracking
-  As a user, I want to be able to save my semester to file (if I so choose)
-  As a user, I want to be able to be able to load my semester from file (if I so choose)
+- As a user, I want to be able to save my semester to file (if I so choose)
+- As a user, I want to be able to be able to load my semester from file (if I so choose)
 
