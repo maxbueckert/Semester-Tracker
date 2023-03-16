@@ -1,0 +1,44 @@
+{"courseList": [
+    {
+        "name": "cpsc450",
+        "taskList": [
+            {
+                "taskMonth": 1,
+                "name": "midterm 1",
+                "taskDay": 25,
+                "weight": 25,
+                "mark": 76.851
+            },
+            {
+                "taskMonth": 2,
+                "name": "midterm 2",
+                "taskDay": 23,
+                "weight": 30,
+                "mark": -1
+            }
+        ]
+    },
+    {
+        "name": "german275",
+        "taskList": [
+            {
+                "taskMonth": 1,
+                "name": "oral quiz 1",
+                "taskDay": 25,
+                "weight": 25,
+                "mark": 91.34
+            },
+            {
+                "taskMonth": 1,
+                "name": "listening quiz 1",
+                "taskDay": 31,
+                "weight": 10,
+                "mark": 85.03
+            }
+        ]
+    },
+    {
+        "name": "math376",
+        "taskList": []
+    }
+]}
