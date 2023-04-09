@@ -22,6 +22,7 @@ public class Semester implements Writable {
     // EFFECTS: adds given course to semester's course list
     public void addCourse(Course course) {
         courseList.add(course);
+        EventLog.getInstance().logEvent(new Event("Added course: " +  course.getName()));
     }
 
 
@@ -30,6 +31,7 @@ public class Semester implements Writable {
     // EFFECTS: removes given course from semester course list
     public void removeCourse(Course courseToRemove) {
         courseList.remove(courseToRemove);
+        EventLog.getInstance().logEvent(new Event("Removed course: " +  courseToRemove.getName()));
     }
 
     // EFFECTS: returns true if course list is empty, otherwise returns false
@@ -66,7 +68,8 @@ public class Semester implements Writable {
                 allTasks.add(task);
             }
         }
-        return allTasks;
+        ArrayList<Task> sortedTasks = sortAllTasksByDate(allTasks);
+        return sortedTasks;
     }
 
     // EFFECTS: returns sorted list of tasks, sorted chronologically based on task due date

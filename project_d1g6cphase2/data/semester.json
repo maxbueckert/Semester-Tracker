@@ -26,62 +26,7 @@
         ]
     },
     {
-        "name": "german275",
-        "taskList": [
-            {
-                "taskMonth": 1,
-                "name": "oral quiz 1",
-                "taskDay": 23,
-                "weight": 10,
-                "mark": 91.34
-            },
-            {
-                "taskMonth": 1,
-                "name": "listening quiz 1",
-                "taskDay": 31,
-                "weight": 30,
-                "mark": 85.03
-            },
-            {
-                "taskMonth": 2,
-                "name": "oral quiz 2",
-                "taskDay": 23,
-                "weight": 20,
-                "mark": -1
-            },
-            {
-                "taskMonth": 2,
-                "name": "listening quiz 2",
-                "taskDay": 31,
-                "weight": 20,
-                "mark": -1
-            },
-            {
-                "taskMonth": 4,
-                "name": "final exam",
-                "taskDay": 27,
-                "weight": 20,
-                "mark": -1
-            }
-        ]
-    },
-    {
-        "name": "math376",
-        "taskList": [
-            {
-                "taskMonth": 2,
-                "name": "midterm",
-                "taskDay": 16,
-                "weight": 40,
-                "mark": 89.11
-            },
-            {
-                "taskMonth": 4,
-                "name": "final",
-                "taskDay": 29,
-                "weight": 60,
-                "mark": -1
-            }
-        ]
+        "name": "hello",
+        "taskList": []
     }
 ]}

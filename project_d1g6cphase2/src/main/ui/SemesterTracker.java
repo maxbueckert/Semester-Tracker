@@ -4,6 +4,7 @@ import model.Semester;
 import model.Course;
 import model.Task;
 
+import java.awt.event.ActionEvent;
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
@@ -13,11 +14,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
-// Represents Semester Tracker application
-public class SemesterTracker {
+import model.EventLog;
+import model.Event;
 
+import javax.swing.*;
+
+
+// Represents Semester Tracker application
+public class SemesterTracker extends JFrame {
     private static final String JSON_STORE = "./data/semester.json";
-    private static Semester semester;
+    protected static Semester semester;
 
     private Scanner input;
     private String command;
@@ -28,10 +34,20 @@ public class SemesterTracker {
 
     // EFFECTS: Prints welcome statement, initializes SemesterTracker program, and runs intro interface
     public SemesterTracker() {
-        System.out.println("\nWelcome to SemesterTracker!");
         init();
+        new SemesterTrackerGUI();
+        System.out.println("\nWelcome to SemesterTracker!");
         runIntroUI();
     }
+
+
+
+    // EFFECTS: Constructor called from SemesterTrackerGUI, re-initializes SemesterTracker programs
+    protected SemesterTracker(String dummy) {
+        init();
+    }
+
+
 
     // MODIFIES: this
     // EFFECTS: initializes program: creates new semester, adds the pre-installed courses to semester
@@ -45,48 +61,55 @@ public class SemesterTracker {
 //        initMath();
     }
 
-    // MODIFIES: this
-    // EFFECTS: constructs example math course and adds it to semester
-    private void initMath() {
-        Course math = new Course("math376");
-        Task midterm = new Task("midterm", 40, 2, 16);
-        midterm.setMark(89.11);
-        math.addTask(midterm);
-        math.addTask(new Task("final", 60, 4, 29));
-        semester.addCourse(math);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: constructs example german course and adds it to semester
-    private void initGerman() {
-        Course german = new Course("german275");
-        Task oralOne = new Task("oral quiz 1", 10, 1, 23);
-        oralOne.setMark(91.34);
-        german.addTask(oralOne);
-        Task listeningOne = new Task("listening quiz 1", 30, 1, 31);
-        listeningOne.setMark(85.03);
-        german.addTask(listeningOne);
-        german.addTask(new Task("oral quiz 2", 20, 2, 23));
-        german.addTask(new Task("listening quiz 2", 20, 2, 31));
-        german.addTask(new Task("final exam", 20, 4, 27));
-        semester.addCourse(german);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: constructs example cpsc course and adds it to semester
-    private void initCpsc() {
-        Course cpcs = new Course("cpsc450");
-        Task midtermOne = new Task("midterm 1", 25, 1, 25);
-        midtermOne.setMark(96.851);
-        cpcs.addTask(midtermOne);
-        cpcs.addTask(new Task("midterm 2", 25, 2, 25));
-        cpcs.addTask(new Task("final", 50, 4, 25));
-        semester.addCourse(cpcs);
-    }
+//    // MODIFIES: this
+//    // EFFECTS: constructs example math course and adds it to semester
+//    private void initMath() {
+//        Course math = new Course("math376");
+//        Task midterm = new Task("midterm", 40, 2, 16);
+//        midterm.setMark(89.11);
+//        math.addTask(midterm);
+//        math.addTask(new Task("final", 60, 4, 29));
+//        semester.addCourse(math);
+//    }
+//
+//    // MODIFIES: this
+//    // EFFECTS: constructs example german course and adds it to semester
+//    private void initGerman() {
+//        Course german = new Course("german275");
+//        Task oralOne = new Task("oral quiz 1", 10, 1, 23);
+//        oralOne.setMark(91.34);
+//        german.addTask(oralOne);
+//        Task listeningOne = new Task("listening quiz 1", 30, 1, 31);
+//        listeningOne.setMark(85.03);
+//        for (int i = 2; i < 12; i++) {
+//            german.addTask(new Task("oral quiz " + i, 20, i, 23));
+//            german.addTask(new Task("listening quiz " + i, 20, i, 31));
+//            german.addTask(new Task("exam " + 1, 20, i, 27));
+//
+//        }
+//        semester.addCourse(german);
+//    }
+//
+//    // MODIFIES: this
+//    // EFFECTS: constructs example cpsc course and adds it to semester
+//    private void initCpsc() {
+//        Course cpcs = new Course("cpsc450");
+//        Task midtermOne = new Task("midterm 1", 25, 1, 25);
+//        midtermOne.setMark(96.851);
+//        cpcs.addTask(midtermOne);
+//        cpcs.addTask(new Task("midterm 2", 25, 2, 25));
+//        cpcs.addTask(new Task("final", 50, 4, 25));
+//        semester.addCourse(cpcs);
+//    }
 
     // EFFECTS: prints goodbye statement then exits program
-    private void exitProgram() {
+    protected void exitProgram() {
         System.out.println("Goodbye!");
+        EventLog el = EventLog.getInstance();
+        System.out.println("Event Log: ");
+        for (Event next : el) {
+            System.out.println(next.toString());
+        }
         System.exit(0);
     }
 
@@ -101,8 +124,12 @@ public class SemesterTracker {
 
 
 
-    // MODIFIES: this
-    // EFFECTS: constructs the intro user interface (main menu)
+
+    // ----------INTRO -------------
+
+
+    // MODIFIES: This
+    // EFFECTS: constructs the Main Menu console user interface
     private void runIntroUI() {
         displayIntroMenu();
         initCommand();
@@ -138,37 +165,35 @@ public class SemesterTracker {
         }
     }
 
+
     // * This code was adapted from CPSC210 WorkRoomApp
     // EFFECTS: saves semester to file
-    private void saveSemester() {
+    protected boolean saveSemester() {
         try {
             jsonWriter.open();
             jsonWriter.write(semester);
             jsonWriter.close();
             System.out.println("Saved semester to " + JSON_STORE);
-            runIntroUI();
+            return true;
         } catch (FileNotFoundException e) {
             System.out.println("Unable to write to file: " + JSON_STORE);
-            runIntroUI();
+            return false;
         }
     }
 
     // * This code was adapted from CPSC210 WorkRoomApp
     // MODIFIES: this
-    // EFFECTS: loads workroom from file
-    private void loadSemester() {
+    // EFFECTS: loads semester from file
+    protected boolean loadSemester() {
         try {
             semester = jsonReader.read();
             System.out.println("Loaded semester from " + JSON_STORE);
-            runIntroUI();
+            return true;
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
-            runIntroUI();
+            return false;
         }
     }
-
-
-
 
 
     // MODIFIES: this
@@ -181,8 +206,16 @@ public class SemesterTracker {
 
 
 
-    // MODIFIES: this
-    // EFFECTS: constructs All Tasks user interface
+
+
+
+
+
+    // ------------ ALLTASKS CONSOLE -------------
+
+
+    // MODIFIES: This
+    // EFFECTS: constructs the All Tasks console user interface
     private void runAllTasksUI() {
         displayAllTasksMenu();
         initCommand();
@@ -234,7 +267,9 @@ public class SemesterTracker {
         double mark = task.getMark();
         String markRounded = task.getMarkRounded();
         String course = task.getCourse().getName();
-        System.out.print("\t " + taskMonth + "/" + taskDay + ": \t " + taskName + "," + "\t Weight: " + weight + "%,");
+        String firstOutput = "\t " + taskMonth + "/" + taskDay + ": \t ";
+        firstOutput += taskName + "," + "\t Weight: " + weight + "%,";
+        System.out.print(firstOutput);
         if (mark < 0) {
             System.out.print("\t Mark: n/a,");
         } else {
@@ -246,6 +281,11 @@ public class SemesterTracker {
 
 
 
+
+
+
+
+    // ----------  ALL COURSES CONSOLE ----------------
 
     // MODIFIES: this
     // EFFECTS: constructs the All Courses user interface
@@ -303,6 +343,11 @@ public class SemesterTracker {
 
 
 
+
+
+
+    // ---------- ADD COURSE ------------
+
     // MODIFIES: this
     // EFFECTS: constructs the Add Course user interface
     private void runAddCourseUI() {
@@ -354,9 +399,6 @@ public class SemesterTracker {
     }
 
 
-
-
-
     // MODIFIES: this
     // EFFECTS: constructs the next-options user interface, after user has added a course
     private void runFurtherOptionsAddCourseUI(Course course) {
@@ -401,6 +443,10 @@ public class SemesterTracker {
 
 
 
+
+
+
+    // ------ SINGLE COURSE ---------------
 
     // MODIFIES: this
     // EFFECTS: constructs the singular course user interface
@@ -479,7 +525,6 @@ public class SemesterTracker {
         initCommand();
         processSingleCourseCommand(course);
     }
-
 
 
 
@@ -602,6 +647,10 @@ public class SemesterTracker {
 
 
 
+
+
+
+
     // MODIFIES: this
     // EFFECTS: constructs the Delete Course user-interface
     private void runDeleteCourseUI(Course course) {
@@ -641,6 +690,10 @@ public class SemesterTracker {
         processDeleteCourseCommand(course);
 
     }
+
+
+
+
 
 
 
@@ -701,6 +754,9 @@ public class SemesterTracker {
 
 
 
+
+
+
     // MODIFIES: this
     // EFFECTS: constructs the Enter Task Grade user-interface
     private void runEnterGradeUI(Task task) {
@@ -749,6 +805,9 @@ public class SemesterTracker {
 
 
 
+
+    
+
     // MODIFIES: this
     // EFFECTS: constructs the Delete Task user-interface
     private void runDeleteTaskUI(Task task) {
@@ -789,7 +848,6 @@ public class SemesterTracker {
         processDeleteTaskCommand(task);
 
     }
-
 
 
 }
